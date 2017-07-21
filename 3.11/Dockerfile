@@ -1,5 +1,6 @@
-FROM debian:jessie-backports
 FROM sumglobal/rpi-openjdk:8-azul
+
+RUN [ "cross-build-start" ]
 
 # explicitly set user/group IDs
 RUN groupadd -r cassandra --gid=999 && useradd -r -g cassandra --uid=999 cassandra
@@ -46,3 +47,5 @@ VOLUME /var/lib/cassandra
 # 9160: thrift service
 EXPOSE 7000 7001 7199 9042 9160
 CMD ["/$DISTRO_NAME/bin/cassandra", "-f"]
+
+RUN [ "cross-build-end" ] 
