@@ -17,7 +17,7 @@ RUN set -x \
 	&& rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
 	&& chmod +x /usr/local/bin/gosu \
 	&& gosu nobody true \
-	&& apt-get purge -y --auto-remove ca-certificates wget
+	&& apt-get purge -y --auto-remove ca-certificates 
 
 # solves warning: "jemalloc shared library could not be preloaded to speed up memory allocations"
 RUN apt-get update && apt-get install -y --no-install-recommends libjemalloc1 && rm -rf /var/lib/apt/lists/*
@@ -26,9 +26,9 @@ ENV CASSANDRA_VERSION 3.11.0
 ARG DISTRO_NAME=apache-cassandra-3.11.0
 
 RUN set -x \
-    && wget -q "http://www.gtlib.gatech.edu/pub/apache/cassandra/3.11.0/$DISTRO_NAME-bin.tar.gz" \
-    tar -xzf "$DISTRO_NAME-bin.tar.gz" \
-    rm -r "$DISTRO_NAME-bin.tar.gz"
+    && wget "http://www.gtlib.gatech.edu/pub/apache/cassandra/3.11.0/$DISTRO_NAME-bin.tar.gz" \
+    && tar -xzf "$DISTRO_NAME-bin.tar.gz" \
+    && rm -r "$DISTRO_NAME-bin.tar.gz"
 
 ENV CASSANDRA_CONFIG /etc/cassandra
 
