@@ -46,6 +46,6 @@ VOLUME /var/lib/cassandra
 # 9042: CQL
 # 9160: thrift service
 EXPOSE 7000 7001 7199 9042 9160
-CMD ["/$DISTRO_NAME/bin/cassandra", "-f"]
+CMD ["/apache-cassandra-3.11.0/bin/cassandra", "-f"]
 
 RUN [ "cross-build-end" ] 
