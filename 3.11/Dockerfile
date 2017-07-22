@@ -31,6 +31,7 @@ RUN set -x \
     && rm -r "$DISTRO_NAME-bin.tar.gz"
 
 ENV CASSANDRA_CONFIG /etc/cassandra
+ENV CASSANDRA_CONF "$DISTRO_NAME/conf"
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
