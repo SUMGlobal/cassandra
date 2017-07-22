@@ -23,7 +23,7 @@ RUN set -x \
 RUN apt-get update && apt-get install -y --no-install-recommends libjemalloc1 && rm -rf /var/lib/apt/lists/*
 
 ENV CASSANDRA_VERSION 3.11.0
-ARG DISTRO_NAME=apache-cassandra-3.11.0
+ENV DISTRO_NAME=apache-cassandra-3.11.0
 
 RUN set -x \
     && wget "http://www.gtlib.gatech.edu/pub/apache/cassandra/3.11.0/$DISTRO_NAME-bin.tar.gz" \
@@ -38,7 +38,7 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 RUN mkdir -p /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chown -R cassandra:cassandra /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chmod 777 /var/lib/cassandra "$CASSANDRA_CONFIG" \
-	&& chown -R cassandra:cassandra "$DISTRO_NAME-bin.tar.gz"
+	&& chown -R cassandra:cassandra "$DISTRO_NAME"
 VOLUME /var/lib/cassandra
 
 # 7000: intra-node communication
