@@ -22,11 +22,11 @@ RUN set -x \
 # solves warning: "jemalloc shared library could not be preloaded to speed up memory allocations"
 RUN apt-get update && apt-get install -y --no-install-recommends libjemalloc1 && rm -rf /var/lib/apt/lists/*
 
-ENV CASSANDRA_VERSION 3.11.0
-ENV DISTRO_NAME=apache-cassandra-3.11.0
+ENV CASSANDRA_VERSION 3.0.14
+ENV DISTRO_NAME=apache-cassandra-3.0.14
 
 RUN set -x \
-    && wget "http://www.gtlib.gatech.edu/pub/apache/cassandra/3.11.0/$DISTRO_NAME-bin.tar.gz" \
+    && wget "http://www.gtlib.gatech.edu/pub/apache/cassandra/3.0.14/apache-cassandra-3.0.14-bin.tar.gz" \
     && tar -xzf "$DISTRO_NAME-bin.tar.gz" \
     && rm -r "$DISTRO_NAME-bin.tar.gz"
 
@@ -49,7 +49,7 @@ VOLUME /var/lib/cassandra
 # 9160: thrift service
 EXPOSE 7000 7001 7199 9042 9160
 
-CMD ["/apache-cassandra-3.11.0/bin/cassandra", "-f"]
+CMD ["/apache-cassandra-3.0.14/bin/cassandra", "-f"]
 
 RUN [ "cross-build-end" ] 
 USER cassandra
