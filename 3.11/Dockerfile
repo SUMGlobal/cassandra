@@ -43,6 +43,7 @@ ENV MAX_HEAP_SIZE "256m"
 ENV HEAP_NEWSIZE "128m"
 ENV CASSANDRA_START_RPC "true"
 
+
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
@@ -54,9 +55,9 @@ RUN mkdir -p /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& ln -s /$DISTRO_NAME /apache-cassandra 
 
 RUN sed -i 's/^start_rpc.*$/start_rpc: true/' /apache-cassandra/conf/cassandra.yaml \
-    && cp /apache-cassandra/conf/cassandra.yaml /etc/cassandra/ \
-    && export PATH=/apache-cassandra/bin:$PATH
+    && cp /apache-cassandra/conf/cassandra.yaml /etc/cassandra/
 
+ENV PATH /apache-cassandra/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 VOLUME /var/lib/cassandra
 
 # 7000: intra-node communication
@@ -66,7 +67,6 @@ VOLUME /var/lib/cassandra
 # 9160: thrift service
 EXPOSE 7000 7001 7199 9042 9160
 
-CMD ["/apache-cassandra/bin/cassandra", "-f"]
+CMD ["cassandra", "-f"]
 
 RUN [ "cross-build-end" ] 
-#USER cassandra
