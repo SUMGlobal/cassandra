@@ -22,16 +22,18 @@ RUN set -x \
 # solves warning: "jemalloc shared library could not be preloaded to speed up memory allocations"
 RUN apt-get update && apt-get install -y --no-install-recommends libjemalloc1 && rm -rf /var/lib/apt/lists/*
 
-ENV CASSANDRA_VERSION 3.0.14
-ENV DISTRO_NAME=apache-cassandra-3.0.14
+ENV CASSANDRA_VERSION 3.11.0
+ENV DISTRO_NAME "apache-cassandra-$CASSANDRA_VERSION"
 
 RUN set -x \
-    && wget "http://www.gtlib.gatech.edu/pub/apache/cassandra/3.0.14/apache-cassandra-3.0.14-bin.tar.gz" \
+    && wget "http://www.gtlib.gatech.edu/pub/apache/cassandra/$CASSANDRA_VERSION/$DISTRO_NAME-bin.tar.gz" \
     && tar -xzf "$DISTRO_NAME-bin.tar.gz" \
     && rm -r "$DISTRO_NAME-bin.tar.gz"
 
 ENV CASSANDRA_CONFIG /etc/cassandra
-#ENV CASSANDRA_CONF "/$DISTRO_NAME/conf"
+ENV CASSANDRA_CONF "/$DISTRO_NAME/conf"
+ENV MAX_HEAP_SIZE "256m"
+ENV HEAP_NEWSIZE "128m"
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
@@ -39,7 +41,8 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 RUN mkdir -p /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chown -R cassandra:cassandra /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chmod 777 /var/lib/cassandra "$CASSANDRA_CONFIG" \
-	&& chown -R cassandra:cassandra "$DISTRO_NAME"
+	&& mkdir -p "/$DISTRO_NAME/logs" \
+	&& chown -R cassandra:cassandra "/$DISTRO_NAME"
 VOLUME /var/lib/cassandra
 
 # 7000: intra-node communication
@@ -49,7 +52,7 @@ VOLUME /var/lib/cassandra
 # 9160: thrift service
 EXPOSE 7000 7001 7199 9042 9160
 
-CMD ["/apache-cassandra-3.0.14/bin/cassandra", "-f"]
+CMD ["/$DISTRO_NAME/bin/cassandra", "-f"]
 
 RUN [ "cross-build-end" ] 
 USER cassandra
