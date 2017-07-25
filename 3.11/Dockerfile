@@ -37,7 +37,7 @@ RUN set -x \
     && tar -xzf "$DISTRO_NAME-bin.tar.gz" \
     && rm -r "$DISTRO_NAME-bin.tar.gz"
 
-ENV CASSANDRA_CONFIG /etc/cassandra
+ENV CASSANDRA_CONFIG "/$DISTRO_NAME/conf"
 ENV CASSANDRA_CONF "/$DISTRO_NAME/conf"
 ENV MAX_HEAP_SIZE "256m"
 ENV HEAP_NEWSIZE "128m"
@@ -51,11 +51,11 @@ RUN mkdir -p /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chown -R cassandra:cassandra /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chmod 777 /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& mkdir -p "/$DISTRO_NAME/logs" \
+	&& mkdir -p /var/log/cassandra
 	&& chown -R cassandra:cassandra "/$DISTRO_NAME" \
 	&& ln -s /$DISTRO_NAME /apache-cassandra 
 
-RUN sed -i 's/^start_rpc.*$/start_rpc: true/' /apache-cassandra/conf/cassandra.yaml \
-    && cp /apache-cassandra/conf/cassandra.yaml /etc/cassandra/
+RUN sed -i 's/^start_rpc.*$/start_rpc: true/' $CASSANDRA_CONFIG/cassandra.yaml 
 
 ENV PATH /apache-cassandra/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 VOLUME /var/lib/cassandra
