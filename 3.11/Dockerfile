@@ -51,7 +51,7 @@ RUN mkdir -p /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chown -R cassandra:cassandra /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chmod 777 /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& mkdir -p "/$DISTRO_NAME/logs" \
-	&& mkdir -p /var/log/cassandra
+	&& mkdir -p /var/log/cassandra \
 	&& chown -R cassandra:cassandra "/$DISTRO_NAME" \
 	&& ln -s /$DISTRO_NAME /apache-cassandra 
 
