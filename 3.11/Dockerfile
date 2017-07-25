@@ -42,7 +42,8 @@ RUN mkdir -p /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chown -R cassandra:cassandra /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& chmod 777 /var/lib/cassandra "$CASSANDRA_CONFIG" \
 	&& mkdir -p "/$DISTRO_NAME/logs" \
-	&& chown -R cassandra:cassandra "/$DISTRO_NAME"
+	&& chown -R cassandra:cassandra "/$DISTRO_NAME" \
+	&& ln -s /$DISTRO_NAME /apache-cassandra
 VOLUME /var/lib/cassandra
 
 # 7000: intra-node communication
@@ -52,7 +53,7 @@ VOLUME /var/lib/cassandra
 # 9160: thrift service
 EXPOSE 7000 7001 7199 9042 9160
 
-CMD ["/$DISTRO_NAME/bin/cassandra", "-f"]
+CMD ["/apache-cassandra/bin/cassandra", "-f"]
 
 RUN [ "cross-build-end" ] 
 USER cassandra
