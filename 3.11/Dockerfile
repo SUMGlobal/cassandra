@@ -45,6 +45,7 @@ ENV CASSANDRA_START_RPC "true"
 
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY cassandra.yaml /$CASSANDRA_CONFIG/
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 RUN mkdir -p /var/lib/cassandra "$CASSANDRA_CONFIG" \
